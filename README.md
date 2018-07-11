@@ -22,6 +22,7 @@ linux环境下docker实现nginx负载均衡环境搭建
 /etc/nginx/conf.d	容器内的nginx配置目录
 /root/docker/nginx/nginx.conf	主机的nginx配置文件
 /etc/nginx/nginx.conf	容器内的nginx配置文件
+/root/docker/nginx/nginx_main.conf	主机的nginx代理服务器配置文件
 ```
 
 ## 步骤
@@ -34,7 +35,8 @@ linux环境下docker实现nginx负载均衡环境搭建
 docker pull php:7.0-fpm
 
 # 启动容器
-docker run --name php -d -p 9001:9000 -v /var/www/html/laravel:/usr/share/nginx/html php:7.0-fpm
+docker run --name php -d -p 9001:9000 \
+-v /var/www/html/laravel:/usr/share/nginx/html php:7.0-fpm
 
 #安装pdo_mysql扩展
 docker-php-ext-install pdo_mysql
@@ -49,10 +51,16 @@ docker-php-ext-install pdo_mysql
 docker pull nginx
 
 # 启动nginx1容器
-docker run --name nginx1 -d -p 81:80 -v /root/docker/nginx/conf.d:/etc/nginx/conf.d -v /root/docker/nginx/nginx.conf:/etc/nginx/nginx.conf -v /var/www/html/laravel:/usr/share/nginx/html --link php:php nginx
+docker run --name nginx1 -d -p 81:80 \
+-v /root/docker/nginx/conf.d:/etc/nginx/conf.d \
+-v /root/docker/nginx/nginx.conf:/etc/nginx/nginx.conf \
+-v /var/www/html/laravel:/usr/share/nginx/html --link php:php nginx
 
 # 启动nginx2容器
-docker run --name nginx2 -d -p 82:80 -v /root/docker/nginx/conf.d:/etc/nginx/conf.d -v /root/docker/nginx/nginx.conf:/etc/nginx/nginx.conf -v /var/www/html/laravel:/usr/share/nginx/html --link php:php nginx
+docker run --name nginx2 -d -p 82:80 \
+-v /root/docker/nginx/conf.d:/etc/nginx/conf.d \
+-v /root/docker/nginx/nginx.conf:/etc/nginx/nginx.conf \
+-v /var/www/html/laravel:/usr/share/nginx/html --link php:php nginx
 ```
 
 
@@ -118,7 +126,8 @@ server {
 3. 启动nginx_main反向代理服务器，关联nginx1和nginx2
 
 ```shell
-docker run --name nginx_main -d -p 83:80 -v /root/docker/nginx/nginx_main.conf:/etc/nginx/nginx.conf --link nginx1:nginx1 --link nginx2:nginx2 nginx
+docker run --name nginx_main -d -p 83:80 \
+-v /root/docker/nginx/nginx_main.conf:/etc/nginx/nginx.conf --link nginx1:nginx1 --link nginx2:nginx2 nginx
 ```
 
 
