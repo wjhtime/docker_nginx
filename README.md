@@ -13,20 +13,16 @@ linux环境下docker实现nginx负载均衡环境搭建
 
 最后通过观察nginx1，2的访问日志可以看到效果
 
-
-
 ## 目录说明
 
 ```
-/var/www/html/laravel			主机的网站地址
-/usr/share/nginx/html			容器内的网站地址
-/root/docker/nginx/conf.d		主机的nginx配置目录
-/etc/nginx/conf.d				容器内的nginx配置目录
-/root/docker/nginx/nginx.conf	 主机的nginx配置文件
-/etc/nginx/nginx.conf			容器内的nginx配置文件
+/var/www/html/laravel	主机的网站地址
+/usr/share/nginx/html	容器内的网站地址
+/root/docker/nginx/conf.d	主机的nginx配置目录
+/etc/nginx/conf.d	容器内的nginx配置目录
+/root/docker/nginx/nginx.conf	主机的nginx配置文件
+/etc/nginx/nginx.conf	容器内的nginx配置文件
 ```
-
-
 
 ## 步骤
 
@@ -153,12 +149,12 @@ http {
 	access_log  /var/log/nginx/access.log  main;
 	sendfile            on;
 	tcp_nopush          on;
-    tcp_nodelay         on;
-    keepalive_timeout   65;
-    types_hash_max_size 2048;
+	tcp_nodelay         on;
+	keepalive_timeout   65;
+	types_hash_max_size 2048;
 
-    include             /etc/nginx/mime.types;
-    default_type        application/octet-stream;
+	include             /etc/nginx/mime.types;
+	default_type        application/octet-stream;
 
 	server {
 		listen 80;
